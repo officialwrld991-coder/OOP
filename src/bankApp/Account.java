@@ -3,15 +3,18 @@ package bankApp;
 public class Account {
 
     private int balance;
-    private int secondBalance;
-    String pin = "0000";
+    private String name;
+    private String pin;
+    private int newAccountNumber;
 
-    public Account(String userPin){
-        this.pin = userPin;
+    public Account(String fullName, String password, int newAccountNumber) {
+        this.name = fullName;
+        this.pin = password;
+        this.newAccountNumber = newAccountNumber;
     }
 
-    public int getBalance(){
-
+    public int getBalance(String pin){
+        validatePin(pin);
         return balance;
     }
 
@@ -24,25 +27,25 @@ public class Account {
 
         if (amount < balance) balance = balance - amount;
     }
-
-    public void transfer(Account secondAccount, int sent, String UserPin) {
-
-        validatePin(UserPin);
-
-        if (sent > balance) {
-            throw new IllegalArgumentException("Insufficient balance");
-        }
-
-        balance = balance - sent;
-        secondAccount.deposit(sent);
-    }
+//
+//    public void transfer(Account secondAccount, int sent, String UserPin) {
+//
+//        validatePin(UserPin);
+//
+//        if (sent > balance) {
+//            throw new IllegalArgumentException("Insufficient balance");
+//        }
+//
+//        balance = balance - sent;
+//        secondAccount.deposit(sent);
     private void validatePin(String userPin) {
         if (!this.pin.equals(userPin)) {
-            throw new IllegalArgumentException("Incorrect PIN. Access Denied.");
+            throw new IllegalArgumentException("Incorrect PIN");
         }
     }
-
-
+    public int getNumber() {
+        return newAccountNumber;
 
     }
+}
 

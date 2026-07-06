@@ -11,8 +11,8 @@ public class AccountTest {
     Account myAccount;
 
     @BeforeEach
-    public void setUp(){
-        myAccount = new Account("1234");
+    public void setUp() {
+        myAccount = new Account("name", "1234", 100100);
     }
 
     @Test
@@ -20,50 +20,35 @@ public class AccountTest {
         myAccount.deposit(1000);
         myAccount.deposit(500);
 
-        assertEquals(1500, myAccount.getBalance());
+        assertEquals(1500, myAccount.getBalance("1234"));
     }
+
     @Test
     public void depositNegative500IntoAnEmptyAccountAndBalanceIs0() {
         myAccount.deposit(-500);
 
-        assertEquals(0, myAccount.getBalance());
+        assertEquals(0, myAccount.getBalance("1234"));
     }
 
     @Test
     public void withdraw50FromAnEmptyAccountAndBalanceIs0() {
         myAccount.withdraw(50, "1234");
 
-        assertEquals(0, myAccount.getBalance());
+        assertEquals(0, myAccount.getBalance("1234"));
     }
 
     @Test
     public void deposit1000FromMyAccountAndWithdraw400BalanceIs600() {
         myAccount.deposit(1000);
         myAccount.withdraw(400, "1234");
-        assertEquals(600, myAccount.getBalance());
-
+        assertEquals(600, myAccount.getBalance("1234"));
     }
 
     @Test
-    public void iDeposit2000AndTransfer1300_BalanceIs700 () {
+    public void deposit2kWithdraw1kWithIncorrectPin() {
         myAccount.deposit(2000);
-        Account secondAccount = new Account("1234");
-        myAccount.transfer(secondAccount, 1300, "1234");
-
-        assertEquals(700, myAccount.getBalance());
-        assertEquals(1300, secondAccount.getBalance());
+        assertThrows(IllegalArgumentException.class, () -> myAccount.withdraw(1000, "2020"));
+        assertEquals(2000, myAccount.getBalance("1234"));
     }
-
-    @Test
-    public void iDeposit1000AndTransfer1500_returnsException () {
-        myAccount.deposit(1000);
-        Account secondAccount = new Account("1234");
-
-        assertThrows(IllegalArgumentException.class, () -> myAccount.transfer(secondAccount, 1500, "1234"));
-    }
-
-
-
-
-    }
+}
 
