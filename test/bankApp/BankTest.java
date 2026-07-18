@@ -2,6 +2,7 @@ package bankApp;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -26,9 +27,9 @@ public class BankTest {
     @Test
     public void findAccountNumber() {
         int secondUser = bank.registerCustomer("secondName", "lastName", "0220");
-        Account foundBank = bank.findAccount(secondUser);
+        Account foundAccount = bank.findAccount(secondUser);
 
-        assertEquals(100101, foundBank.getNumber());
+        assertEquals(100101, foundAccount.getNumber());
     }
 
     @Test
@@ -47,14 +48,14 @@ public class BankTest {
     @Test
     public void iDeposit1kIntoBankAccount () {
         bank.findAccount(firstUser);
-        bank.deposit(firstUser, 1000);
+        bank.deposit(firstUser, new BigDecimal(1000));
 
-        assertEquals(1000, bank.checkBalance(firstUser, "0123"));
+        assertEquals(new BigDecimal(1000), bank.checkBalance(firstUser, "0123"));
     }
     @Test
-    public void iDeposit1k_withdrawWithWrongPin (){
+    public void iDeposit1k_withdrawWithWrongPin_ThrowsException (){
         bank.findAccount(firstUser);
-        bank.deposit(firstUser, 1000);
+        bank.deposit(firstUser, new BigDecimal(1000));
 
         assertThrows(IllegalArgumentException.class, () -> bank.checkBalance(firstUser, "1234"));
     }
@@ -62,24 +63,24 @@ public class BankTest {
     @Test
     public void iDeposit2kIntoBankAccount_withdraw1k (){
         bank.findAccount(firstUser);
-        bank.deposit(firstUser, 2000);
-        assertEquals(2000, bank.checkBalance(firstUser, "0123"));
+        bank.deposit(firstUser, new BigDecimal(2000));
+        assertEquals(new BigDecimal(2000), bank.checkBalance(firstUser, "0123"));
 
-        bank.withdraw(firstUser, 1000, "0123");
+        bank.withdraw(firstUser, new BigDecimal(1000), "0123");
 
-        assertEquals(1000, bank.checkBalance(firstUser, "0123"));
+        assertEquals(new BigDecimal(1000), bank.checkBalance(firstUser, "0123"));
     }
 
     @Test
     public void iDeposit2kIntoBankAccount_iTransfer1k (){
         bank.findAccount(firstUser);
-        bank.deposit(firstUser, 2000);
-        assertEquals(2000, bank.checkBalance(firstUser, "0123"));
+        bank.deposit(firstUser, new BigDecimal(2000));
+        assertEquals(new BigDecimal(2000), bank.checkBalance(firstUser, "0123"));
 
         int secondUser = bank.registerCustomer("secondName", "lastName", "0220");
-        bank.transfer(firstUser, secondUser, 1000, "0123");
+        bank.transfer(firstUser, secondUser, new BigDecimal(1000), "0123");
 
-        assertEquals(1000, bank.checkBalance(firstUser, "0123"));
-        assertEquals(1000, bank.checkBalance(secondUser, "0220"));
+        assertEquals(new BigDecimal(1000), bank.checkBalance(firstUser, "0123"));
+        assertEquals(new BigDecimal(1000), bank.checkBalance(secondUser, "0220"));
     }
 }

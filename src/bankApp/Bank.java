@@ -1,5 +1,6 @@
 package bankApp;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,9 @@ public class Bank {
 
     public Account findAccount(int accountNumber) {
         for (int count = 0; count < accounts.size(); count++) {
-            if (accounts.get(count).getNumber() == accountNumber) return accounts.get(count);
+            if (accounts.get(count).getNumber() == accountNumber) {
+                return accounts.get(count);
+            }
         }
         throw new IllegalArgumentException("Account not found.");
     }
@@ -34,22 +37,22 @@ public class Bank {
         accounts.remove(account);
     }
 
-    public void deposit(int accountNumber, int amount) {
+    public void deposit(int accountNumber, BigDecimal amount) {
         Account account = findAccount(accountNumber);
         account.deposit(amount);
     }
 
-    public int checkBalance(int accountNumber, String pin) {
+    public BigDecimal checkBalance(int accountNumber, String pin) {
         Account account = findAccount(accountNumber);
         return account.getBalance(pin);
     }
 
-    public void withdraw(int accountNumber, int amount, String pin) {
+    public void withdraw(int accountNumber, BigDecimal amount, String pin) {
         Account account = findAccount(accountNumber);
         account.withdraw(amount, pin);
     }
 
-    public void transfer(int senderAccountNumber, int receiverAccountNumber, int amount, String pin) {
+    public void transfer(int senderAccountNumber, int receiverAccountNumber, BigDecimal amount, String pin) {
         Account senderAccount = findAccount(senderAccountNumber);
         Account receieverAccount = findAccount(receiverAccountNumber);
         senderAccount.withdraw(amount, pin);

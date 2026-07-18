@@ -1,8 +1,10 @@
 package bankApp;
 
+import java.math.BigDecimal;
+
 public class Account {
 
-    private int balance;
+    private BigDecimal balance = BigDecimal.ZERO;
     private String name;
     private String pin;
     private int newAccountNumber;
@@ -13,39 +15,31 @@ public class Account {
         this.newAccountNumber = newAccountNumber;
     }
 
-    public int getBalance(String pin){
+    public BigDecimal getBalance(String pin){
         validatePin(pin);
         return balance;
     }
 
-    public void deposit(int amount) {
-       if (amount>0) balance = balance + amount;
+    public void deposit(BigDecimal amount) {
+        if (amount.compareTo(BigDecimal.ZERO) > 0) {
+            balance = balance.add(amount);
         }
-
-    public void withdraw(int amount, String userPin) {
-        validatePin(userPin);
-
-        if (amount < balance) balance = balance - amount;
     }
-//
-//    public void transfer(Account secondAccount, int sent, String UserPin) {
-//
-//        validatePin(UserPin);
-//
-//        if (sent > balance) {
-//            throw new IllegalArgumentException("Insufficient balance");
-//        }
-//
-//        balance = balance - sent;
-//        secondAccount.deposit(sent);
+
+    public void withdraw(BigDecimal amount, String userPin) {
+
+        if (amount.compareTo(balance) < 0) {
+            balance = balance.subtract(amount);
+        }
+    }
+
     private void validatePin(String userPin) {
         if (!this.pin.equals(userPin)) {
             throw new IllegalArgumentException("Incorrect PIN");
         }
     }
+
     public int getNumber() {
         return newAccountNumber;
-
     }
 }
-
